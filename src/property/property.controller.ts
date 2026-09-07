@@ -1,8 +1,8 @@
-import {Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe} from '@nestjs/common';
-import * as createPropertySchema from "./schemas/createPropertySchema.js";
+import {Body, Controller, Get, Param, Patch, Post, UsePipes} from '@nestjs/common';
 import {ZodValidationPipe} from "./pipes/zod-validation.pipe.js";
-import {UpdatePropertySchema} from "./schemas/updatePropertySchema.js";
-import {CreatePropertySchema} from "./schemas/createPropertySchema.js";
+import * as updatePropertySchema from "./schemas/updatePropertySchema.js";
+import * as createPropertySchema from "./schemas/createPropertySchema.js";
+import {UpdatePropertySchema, UpdatePropertyType} from "./schemas/updatePropertySchema.js";
 
 @Controller('property')
 export class PropertyController {
@@ -18,14 +18,19 @@ export class PropertyController {
     }
 
     @Post()
-    @UsePipes(new ZodValidationPipe(CreatePropertySchema))
-    create(@Body() createPropertyType: CreatePropertySchema){
+    @UsePipes(new ZodValidationPipe(createPropertySchema.CreatePropertySchema))
+    create(@Body() createPropertyType: createPropertySchema.CreatePropertyType) {
         return createPropertyType;
     }
 
+    //region update
     @Patch(':id')
-    update(@Param("id") id:string , @Body() updatePropertyShema: UpdatePropertySchema){
-        return updatePropertyShema;
+    update(
+        @Param("id") id: string,
+        @Body(new ZodValidationPipe(updatePropertySchema.UpdatePropertySchema)) updateDto: updatePropertySchema.UpdatePropertyType) {
+        return updateDto;
     }
+
+    //endregion
 
 }

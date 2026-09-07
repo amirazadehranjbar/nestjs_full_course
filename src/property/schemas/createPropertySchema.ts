@@ -7,4 +7,4 @@ export const CreatePropertySchema = z.object({
     area: z.number({message:"area must positive number"}).positive(),
 });
 
-export type CreatePropertySchema = z.infer<typeof CreatePropertySchema>;
+export type CreatePropertyType  = z.infer<typeof CreatePropertySchema>;
